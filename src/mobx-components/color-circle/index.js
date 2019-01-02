@@ -10,6 +10,7 @@ render(){
         // const show = this.props.show;
         // const show = menuStore.show;
         console.log(menuStore.show, 'color');
+        console.log(this.props);
         return(
             <div style={{
              width: '100px',
