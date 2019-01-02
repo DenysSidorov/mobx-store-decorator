@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import ColorCircle from "./color-circle/index";
 import Clicker from "./clicker/index";
+import ClickerL from "./clickerLeft";
+import ClickerR from "./clickerRight";
 
 class App extends Component {
     render() {
@@ -8,6 +10,8 @@ class App extends Component {
             <div>
                 <ColorCircle/>
                 <Clicker/>
+                <ClickerL/>
+                <ClickerR/>
             </div>
         );
     }

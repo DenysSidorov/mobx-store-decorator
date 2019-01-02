@@ -6,11 +6,11 @@ import menuStore from '../../stores/menuStore';
 
 @observer class ColorCircle extends Component{
 render(){
-        console.log('Rerender!');
+        // console.log('Rerender!');
         // const show = this.props.show;
         // const show = menuStore.show;
-        console.log(menuStore.show, 'color');
-        console.log(this.props);
+        // console.log(menuStore.show, 'color');
+        // console.log(this.props);
         return(
             <div style={{
              width: '100px',

@@ -8,14 +8,14 @@ class Clicker extends Component {
             <div style={{
                 width: '50px',
                 height: '50px',
-                backgroundColor: 'yellow'
+                backgroundColor: 'blue'
             }}
             onClick={()=>{
                 console.log('toggle');
-                menuStore.toggleLeftPanel();
+                menuStore.closeLeftPanel();
             }}
             >
-                clicker
+                LEFT
 
             </div>
         )
