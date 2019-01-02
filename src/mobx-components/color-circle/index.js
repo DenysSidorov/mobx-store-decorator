@@ -4,19 +4,19 @@ import menuStore from '../../stores/menuStore';
 
 // const  ColorCircle = observer(() => {
 
-@observer class ColorCircle extends Component{
+class ColorCircle extends Component{
 render(){
         // console.log('Rerender!');
         // const show = this.props.show;
         // const show = menuStore.show;
         // console.log(menuStore.show, 'color');
-        // console.log(this.props);
+        console.log(this.props);
         return(
             <div style={{
              width: '100px',
              height: '100px',
                 borderRadius: '50%',
-             backgroundColor: menuStore.show === true ? 'green' : 'red'
+             backgroundColor: this.props.isOpenLeftPanel === true ? 'green' : 'red'
             }}>
             </div>
         )

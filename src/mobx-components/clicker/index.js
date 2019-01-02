@@ -12,7 +12,7 @@ class Clicker extends Component {
             }}
             onClick={()=>{
                 console.log('toggle');
-                menuStore.toggleLeftPanel();
+                this.props.toggleMenu();
             }}
             >
                 clicker

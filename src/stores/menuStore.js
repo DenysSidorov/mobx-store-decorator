@@ -16,9 +16,9 @@ class MenuStore {
 
     @action('toggle left panel')
     toggleLeftPanel() {
-        // console.log('toggle in store', this.show);
+        console.log('toggle in store', this.show);
         this.show = !this.show;
-        // console.log('toggle in store', this.show);
+        console.log('toggle in store', this.show);
     }
 
 

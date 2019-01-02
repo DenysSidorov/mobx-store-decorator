@@ -4,12 +4,14 @@ import Clicker from "./clicker/index";
 import ClickerL from "./clickerLeft";
 import ClickerR from "./clickerRight";
 
-class App extends Component {
+import { observer, inject } from 'mobx-react';
+@inject("leftMenuStore")
+@observer class App extends Component {
     render() {
         return (
             <div>
-                <ColorCircle/>
-                <Clicker/>
+                <ColorCircle isOpenLeftPanel={this.props.leftMenuStore.isOpenLeftPanel}/>
+                <Clicker toggleMenu={() => this.props.leftMenuStore.toggleLeftPanel()}/>
                 <ClickerL/>
                 <ClickerR/>
             </div>
