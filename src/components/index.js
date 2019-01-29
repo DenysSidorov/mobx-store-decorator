@@ -7,7 +7,6 @@ import Preloader from './Preloader';
 // import LangFlags from './LangFlags';
 import cities from '../api/mocks/cities';
 import {generateUniqueId} from '../helpers/index';
-import st from '../styles/index.scss';
 // import ErrorBoundary from '../HOCs/ErrorBoundary';
 
 class ZiPCodeComponent extends React.Component {

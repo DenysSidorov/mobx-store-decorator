@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/index";
 import registerServiceWorker from "./registerServiceWorker";
-import "./index.css";
+// import "./index.css";
+import st from './styles/convertedFromSCSS.css';
 
 import { useStrict } from 'mobx';
 import leftMenuStore from './stores/menuStore';
