@@ -1,20 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { useStrict } from 'mobx';
-import "./index.css";
 import App from "./mobx-components/index";
 import registerServiceWorker from "./registerServiceWorker";
+import "./index.css";
+
+import { useStrict } from 'mobx';
 import leftMenuStore from './stores/menuStore';
-
 import { Provider } from "mobx-react";
-import UiStore from "./stores/UiStore";
-
 useStrict(true);
-const stores = { leftMenuStore };
 
+const stores = { leftMenuStore: leftMenuStore };
 
 const Root = (
-  <Provider UiStore={UiStore} {...stores}>
+  <Provider {...stores}>
     <App/>
   </Provider>
 );
