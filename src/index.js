@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./mobx-components/index";
+import App from "./components/index";
 import registerServiceWorker from "./registerServiceWorker";
 import "./index.css";
 
