@@ -13,7 +13,7 @@ class ZipCodeItem extends React.Component {
 
   render() {
     const {el, currentItem, selectItem, removeItem} = this.props;
-    console.log('rerender');
+    console.log('rerender', el);
     return (
       <div
         className="zipCodeCont_body_list_item"

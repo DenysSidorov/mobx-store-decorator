@@ -6,11 +6,11 @@ import registerServiceWorker from "./registerServiceWorker";
 import st from './styles/convertedFromSCSS.css';
 
 import { useStrict } from 'mobx';
-import leftMenuStore from './stores/menuStore';
+import zipCodeStore from './stores/zipCodeStore';
 import { Provider } from "mobx-react";
 useStrict(true);
 
-const stores = { leftMenuStore: leftMenuStore };
+const stores = { zipCodeStore };
 
 const Root = (
   <Provider {...stores}>

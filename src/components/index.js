@@ -1,6 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 import React, {Fragment} from 'react';
 import axios from 'axios';
+import mobx from 'mobx';
 import ZipCodeItem from './ZipCodeItem';
 import SearchArea from './SearchArea';
 import Preloader from './Preloader';
@@ -9,13 +10,16 @@ import cities from '../api/mocks/cities';
 import {generateUniqueId} from '../helpers/index';
 // import ErrorBoundary from '../HOCs/ErrorBoundary';
 
-class ZiPCodeComponent extends React.Component {
+import { observer, inject } from 'mobx-react';
+
+@inject("zipCodeStore")
+@observer class ZiPCodeComponent extends React.Component {
   state = {
     currentItem: {},
     searchValue: '',
     searchError: '',
-    isFetching: false,
-    zipCodeItems: cities || [],
+    // isFetching: false,
+    // zipCodeItems: cities || [],
   };
 
   // input handler
@@ -46,8 +50,12 @@ class ZiPCodeComponent extends React.Component {
 
   removeItem = (ev, el) => {
     ev.stopPropagation();
+
+    const {setZipCodeItems, getZipCodeItems} = this.props.zipCodeStore;
+    setZipCodeItems(getZipCodeItems.filter(item => el._id !== item._id));
+
     this.setState((prevState /* props */) => ({
-      zipCodeItems: prevState.zipCodeItems.filter(item => el._id !== item._id),
+      // zipCodeItems: prevState.zipCodeItems.filter(item => el._id !== item._id),
       currentItem: {},
     }));
   };
@@ -84,10 +92,12 @@ class ZiPCodeComponent extends React.Component {
   };
 
   getNewData = async () => {
-    const {isFetching, zipCodeItems, searchValue, currentItem} = this.state;
+    const {setZipCodeItems, getZipCodeItems, getFetchingState} = this.props.zipCodeStore;
+    const {searchValue, currentItem} = this.state;
     // prevent fetching new data if user are fetching data now
-    if (!isFetching) {
-      this.setState({isFetching: true});
+    if (!getFetchingState) {
+      // this.setState({isFetching: true});
+      this.props.zipCodeStore.setFetchingState(true);
       try {
         const result = await axios({
           method: 'get',
@@ -96,19 +106,19 @@ class ZiPCodeComponent extends React.Component {
 
         // if application has correct response
         if (result.status === 200) {
-          const isPostCodeExists = zipCodeItems.some(
+          const isPostCodeExists = getZipCodeItems.some(
             el => el['post code'] === result.data['post code'],
           );
 
-          let newData = [].concat([], zipCodeItems);
+          let newData = [].concat([], getZipCodeItems);
           // create or change exists item
           if (!isPostCodeExists) {
             if (!currentItem._id) {
               // create new item
-              newData = [].concat(zipCodeItems, {...result.data, _id: generateUniqueId()});
+              newData = [].concat(getZipCodeItems, {...result.data, _id: generateUniqueId()});
             } else {
               // update exists item
-              newData = zipCodeItems.map(el =>
+              newData = getZipCodeItems.map(el =>
                 el._id === currentItem._id ? {...result.data, _id: currentItem._id} : el,
               );
             }
@@ -119,15 +129,17 @@ class ZiPCodeComponent extends React.Component {
           if (isPostCodeExists) {
             searchError = 'Post code already exists';
           }
-
+          this.props.zipCodeStore.setFetchingState(false);
           this.setState({
-            isFetching: false,
+            // isFetching: false,
             searchValue: '',
             searchError,
-            zipCodeItems: newData,
+            // zipCodeItems: newData,
           });
+          setZipCodeItems(newData);
         } else {
-          this.setState({isFetching: false, searchError: 'Something wrong with connection!'});
+          this.setState({searchError: 'Something wrong with connection!'});
+          this.props.zipCodeStore.setFetchingState(false);
         }
       } catch (er) {
         console.log(er.response || er);
@@ -135,13 +147,17 @@ class ZiPCodeComponent extends React.Component {
         if (er.response && er.response.data && er.response.data['post code'] === undefined) {
           searchError = "Post code wasn't found";
         }
-        this.setState({isFetching: false, searchError});
+        this.setState({searchError});
+        this.props.zipCodeStore.setFetchingState(false);
       }
     }
   };
 
   render() {
-    const {zipCodeItems, currentItem} = this.state;
+    const {currentItem} = this.state;
+    const {getZipCodeItems, getFetchingState} = this.props.zipCodeStore;
+    console.log(1111, this.props.zipCodeStore);
+    console.log(getZipCodeItems);
     return (
       <Fragment>
         {/*<ErrorBoundary>*/}
@@ -167,23 +183,24 @@ class ZiPCodeComponent extends React.Component {
                 </div>
               </div>
 
-              {(zipCodeItems && zipCodeItems.length) || this.state.isFetching ? (
+              {(getZipCodeItems && getZipCodeItems.length) || getFetchingState /*this.state.isFetching*/ ? (
                 <div className="zipCodeCont_body_list_items_container scrollStylesRD">
-                  {this.state.isFetching ? (
+                  {getFetchingState ? (
                     <div className="zipCodeCont_body_list_items_container_preloader">
                       <Preloader height="24px" />
                     </div>
                   ) : null}
 
-                  {zipCodeItems.map(el => (
-                    <ZipCodeItem
+                  {getZipCodeItems.map(el => {
+                    console.log(' ==== ', el);
+                    return <ZipCodeItem
                       key={el['post code']}
                       el={el}
                       currentItem={currentItem}
                       selectItem={this.selectItem}
                       removeItem={this.removeItem}
                     />
-                  ))}
+                  })}
                 </div>
               ) : null}
             </div>
