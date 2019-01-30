@@ -62,9 +62,10 @@ import { observer, inject } from 'mobx-react';
   };
 
   selectItem = replyItem => {
+    console.log('replyItem ', replyItem);
     // check item, selected or not
     const isAlreadySelected = this.state.currentItem['post code'] === replyItem['post code'];
-
+console.log(isAlreadySelected);
     if (isAlreadySelected) {
       this.setState({
         currentItem: {},
@@ -114,10 +115,14 @@ import { observer, inject } from 'mobx-react';
           // create or change exists item
           if (!isPostCodeExists) {
             if (!currentItem._id) {
+              console.log(1111);
               // add new item
               addZipCodeItem({...result.data, _id: generateUniqueId()});
+              console.log(1111, getZipCodeItems);
             } else {
+              console.log(33333);
               // update exists item
+              // todo fix it need only one object, now app uses map - it's not ok (we have two items instead in our case)
               addZipCodeItem(getZipCodeItems.map(el =>
                 el._id === currentItem._id ? {...result.data, _id: currentItem._id} : el,
               ));
@@ -157,6 +162,7 @@ import { observer, inject } from 'mobx-react';
     const {currentItem} = this.state;
     let {getZipCodeItems, getFetchingState} = this.props.zipCodeStore;
     getZipCodeItems = mobx.toJS(getZipCodeItems);
+    console.log('----- ', getZipCodeItems);
     return (
       <Fragment>
         {/*<ErrorBoundary>*/}

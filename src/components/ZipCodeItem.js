@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import mobx from 'mobx';
 
-class ZipCodeItem extends React.Component {
+class ZipCodeItem extends React.PureComponent {
   componentDidMount() {}
 
   shouldComponentUpdate(nextProps) {
-    if (nextProps.el._id !== this.props.el._id) {
+    if (nextProps.el._id !== this.props.el._id || nextProps.currentItem._id !== this.props.currentItem._id) {
       return true;
     }
     return false;
@@ -17,13 +17,17 @@ class ZipCodeItem extends React.Component {
     // const el = mobx.toJS(this.props.el) || {};
     console.log('RENDER ITEM', el);
     // console.log(' **** - ', el.places[0]);
+    const isActive = { backgroundColor: el._id === currentItem._id ? '#3dce78' : ''};
+    console.log('el._id - ', el._id);
+    console.log('currentItem._id - ', currentItem._id);
+    console.log(el._id === currentItem._id );
     return (
       <div
         className="zipCodeCont_body_list_item"
         onClick={() => {
           selectItem(el);
         }}
-        style={{backgroundColor: el._id === currentItem._id ? '#3dce78' : ''}}
+        style={isActive}
       >
         <div className="itemLeft">
           <div className="zipCodeCont_body_list_item_logo">

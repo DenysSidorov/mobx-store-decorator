@@ -35,6 +35,7 @@ class ZipCodeStore {
 
   @action('add zip code to items ')
   addZipCodeItem = (zipCodeObject) => {
+    console.log(' ++++++', zipCodeObject);
     this.zipCodeItems.push(zipCodeObject);
   }
 
