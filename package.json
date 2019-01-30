@@ -20,5 +20,8 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject"
+  },
+  "devDependencies": {
+    "mobx-react-devtools": "^6.0.3"
   }
 }

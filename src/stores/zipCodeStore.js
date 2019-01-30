@@ -3,14 +3,13 @@ import cities from '../api/mocks/cities';
 
 class ZipCodeStore {
 
-  @observable isFetching;
-  @observable zipCodeItems;
+  @observable isFetching = false;
+  @observable zipCodeItems = [];
 
 
   constructor(cities = [], initialState = {}) {
 
-    this.isFetching = false;
-    this.zipCodeItems = cities;
+    this.zipCodeItems = observable(cities);
 
     extendObservable(this, initialState);
   }
@@ -32,6 +31,11 @@ class ZipCodeStore {
   @action('set zip code items ')
   setZipCodeItems = (array) => {
     this.zipCodeItems = array;
+  }
+
+  @action('add zip code to items ')
+  addZipCodeItem = (zipCodeObject) => {
+    this.zipCodeItems.push(zipCodeObject);
   }
 
 }

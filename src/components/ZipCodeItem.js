@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import mobx from 'mobx';
 
 class ZipCodeItem extends React.Component {
   componentDidMount() {}
@@ -12,8 +13,10 @@ class ZipCodeItem extends React.Component {
   }
 
   render() {
-    const {el, currentItem, selectItem, removeItem} = this.props;
-    console.log('rerender', el);
+    const { el, currentItem, selectItem, removeItem} = this.props;
+    // const el = mobx.toJS(this.props.el) || {};
+    console.log('RENDER ITEM', el);
+    // console.log(' **** - ', el.places[0]);
     return (
       <div
         className="zipCodeCont_body_list_item"

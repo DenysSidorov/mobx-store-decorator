@@ -1,7 +1,8 @@
 /* eslint-disable react/destructuring-assignment */
 import React, {Fragment} from 'react';
 import axios from 'axios';
-import mobx from 'mobx';
+import mobx, {observable} from 'mobx';
+import DevTools from 'mobx-react-devtools';
 import ZipCodeItem from './ZipCodeItem';
 import SearchArea from './SearchArea';
 import Preloader from './Preloader';
@@ -19,7 +20,7 @@ import { observer, inject } from 'mobx-react';
     searchValue: '',
     searchError: '',
     // isFetching: false,
-    // zipCodeItems: cities || [],
+    zipCodeItems: [],
   };
 
   // input handler
@@ -92,7 +93,7 @@ import { observer, inject } from 'mobx-react';
   };
 
   getNewData = async () => {
-    const {setZipCodeItems, getZipCodeItems, getFetchingState} = this.props.zipCodeStore;
+    const {setZipCodeItems, getZipCodeItems, getFetchingState, addZipCodeItem} = this.props.zipCodeStore;
     const {searchValue, currentItem} = this.state;
     // prevent fetching new data if user are fetching data now
     if (!getFetchingState) {
@@ -110,17 +111,17 @@ import { observer, inject } from 'mobx-react';
             el => el['post code'] === result.data['post code'],
           );
 
-          let newData = [].concat([], getZipCodeItems);
           // create or change exists item
           if (!isPostCodeExists) {
             if (!currentItem._id) {
-              // create new item
-              newData = [].concat(getZipCodeItems, {...result.data, _id: generateUniqueId()});
+              // add new item
+              addZipCodeItem({...result.data, _id: generateUniqueId()});
             } else {
               // update exists item
-              newData = getZipCodeItems.map(el =>
+              addZipCodeItem(getZipCodeItems.map(el =>
                 el._id === currentItem._id ? {...result.data, _id: currentItem._id} : el,
-              );
+              ));
+              console.log(3333, getZipCodeItems);
             }
           }
 
@@ -136,7 +137,6 @@ import { observer, inject } from 'mobx-react';
             searchError,
             // zipCodeItems: newData,
           });
-          setZipCodeItems(newData);
         } else {
           this.setState({searchError: 'Something wrong with connection!'});
           this.props.zipCodeStore.setFetchingState(false);
@@ -155,9 +155,8 @@ import { observer, inject } from 'mobx-react';
 
   render() {
     const {currentItem} = this.state;
-    const {getZipCodeItems, getFetchingState} = this.props.zipCodeStore;
-    console.log(1111, this.props.zipCodeStore);
-    console.log(getZipCodeItems);
+    let {getZipCodeItems, getFetchingState} = this.props.zipCodeStore;
+    getZipCodeItems = mobx.toJS(getZipCodeItems);
     return (
       <Fragment>
         {/*<ErrorBoundary>*/}
@@ -206,6 +205,7 @@ import { observer, inject } from 'mobx-react';
             </div>
           </div>
         </div>
+        <DevTools />
       </Fragment>
     );
   }
