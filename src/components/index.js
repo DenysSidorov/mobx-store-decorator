@@ -30,7 +30,6 @@ class ZiPCodeComponent extends React.Component {
     if (regExp.test(target) || target === '') {
       setSearchValue(target);
     } else {
-      setSearchValue('Please type only numbers');
       setErrorValue('Please type only numbers');
       return;
     }
