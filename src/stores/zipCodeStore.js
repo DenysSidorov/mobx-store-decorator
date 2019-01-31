@@ -7,6 +7,7 @@ class ZipCodeStore {
   @observable zipCodeItems = [];
   @observable searchValue = '';
   @observable searchError = '';
+  @observable currentItem = {};
 
 
   constructor(cities = [], initialState = {}) {
@@ -14,6 +15,11 @@ class ZipCodeStore {
     this.zipCodeItems = observable(cities);
 
     extendObservable(this, initialState);
+  }
+
+  @action('set current  zip code')
+  setCurrentItem = (object) => {
+    this.currentItem = object;
   }
 
   @action('set search value')
@@ -24,6 +30,11 @@ class ZipCodeStore {
   @action('set error value')
   setErrorValue = (string) => {
     this.searchError = string;
+  }
+
+  @computed
+  get getCurrentItem () {
+    return this.currentItem;
   }
 
   @computed

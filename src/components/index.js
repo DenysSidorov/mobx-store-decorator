@@ -16,9 +16,9 @@ import { observer, inject } from 'mobx-react';
 @inject("zipCodeStore")
 @observer class ZiPCodeComponent extends React.Component {
   state = {
-    currentItem: {},
+    // currentItem: {},
     // searchValue: '',
-    searchError: '',
+    // searchError: '',
     // isFetching: false,
     // zipCodeItems: [],
   };
@@ -59,33 +59,35 @@ import { observer, inject } from 'mobx-react';
   removeItem = (ev, el) => {
     ev.stopPropagation();
 
-    const {setZipCodeItems, getZipCodeItems} = this.props.zipCodeStore;
+    const {setZipCodeItems, getZipCodeItems, setCurrentItem} = this.props.zipCodeStore;
     setZipCodeItems(getZipCodeItems.filter(item => el._id !== item._id));
-
+    setCurrentItem({});
     this.setState((prevState /* props */) => ({
       // zipCodeItems: prevState.zipCodeItems.filter(item => el._id !== item._id),
-      currentItem: {},
+      // currentItem: {},
     }));
   };
 
   selectItem = replyItem => {
-    const { setSearchValue, setErrorValue } = this.props.zipCodeStore;
+    const { setSearchValue, setErrorValue, getCurrentItem, setCurrentItem } = this.props.zipCodeStore;
     console.log('replyItem ', replyItem);
     // check item, selected or not
-    const isAlreadySelected = this.state.currentItem['post code'] === replyItem['post code'];
+    const isAlreadySelected = getCurrentItem['post code'] === replyItem['post code'];
 console.log(isAlreadySelected);
     if (isAlreadySelected) {
       setSearchValue('');
       setErrorValue('');
+      setCurrentItem({});
       this.setState({
-        currentItem: {},
+        // currentItem: {},
         // searchValue: '',
         // searchError: '',
       });
     } else {
       setSearchValue(replyItem['post code']);
+      setCurrentItem(replyItem);
       this.setState({
-        currentItem: replyItem,
+        // currentItem: replyItem,
         // searchValue: replyItem['post code'],
       });
     }
@@ -106,8 +108,8 @@ console.log(isAlreadySelected);
   };
 
   getNewData = async () => {
-    const {setZipCodeItems, getZipCodeItems, getFetchingState, addZipCodeItem, getSearchValue} = this.props.zipCodeStore;
-    const {currentItem} = this.state;
+    const {setZipCodeItems, getZipCodeItems, getFetchingState, addZipCodeItem, getSearchValue, setCurrentItem,  getCurrentItem} = this.props.zipCodeStore;
+    // const {currentItem} = this.state;
     // prevent fetching new data if user are fetching data now
     if (!getFetchingState) {
       // this.setState({isFetching: true});
@@ -126,7 +128,7 @@ console.log(isAlreadySelected);
 
           // create or change exists item
           if (!isPostCodeExists) {
-            if (!currentItem._id) {
+            if (!getCurrentItem._id) {
               console.log(1111);
               // add new item
               addZipCodeItem({...result.data, _id: generateUniqueId()});
@@ -136,11 +138,12 @@ console.log(isAlreadySelected);
               // update exists item
               // todo fix it need only one object, now app uses map - it's not ok (we have two items instead in our case)
               setZipCodeItems(getZipCodeItems.map(el =>
-                el._id === currentItem._id ? {...result.data, _id: currentItem._id} : el,
+                el._id === getCurrentItem._id ? {...result.data, _id: getCurrentItem._id} : el,
               ));
               console.log(3333, getZipCodeItems);
             }
-            this.setState({currentItem: {}});
+            setCurrentItem({});
+            // this.setState({currentItem: {}});
           }
 
           // generate error text for user
@@ -178,8 +181,8 @@ console.log(isAlreadySelected);
   };
 
   render() {
-    const {currentItem} = this.state;
-    let {getZipCodeItems, getFetchingState, getSearchValue, getSearchError} = this.props.zipCodeStore;
+    // const {currentItem} = this.state;
+    let {getZipCodeItems, getFetchingState, getSearchValue, getSearchError, getCurrentItem} = this.props.zipCodeStore;
     getZipCodeItems = mobx.toJS(getZipCodeItems);
     console.log('----- ', getZipCodeItems);
     return (
@@ -220,7 +223,7 @@ console.log(isAlreadySelected);
                     return <ZipCodeItem
                       key={el['post code']}
                       el={el}
-                      currentItem={currentItem}
+                      currentItem={getCurrentItem}
                       selectItem={this.selectItem}
                       removeItem={this.removeItem}
                     />
