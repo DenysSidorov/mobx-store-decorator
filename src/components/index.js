@@ -118,16 +118,17 @@ console.log(isAlreadySelected);
               console.log(1111);
               // add new item
               addZipCodeItem({...result.data, _id: generateUniqueId()});
-              console.log(1111, getZipCodeItems);
+              console.log(1111111, getZipCodeItems);
             } else {
               console.log(33333);
               // update exists item
               // todo fix it need only one object, now app uses map - it's not ok (we have two items instead in our case)
-              addZipCodeItem(getZipCodeItems.map(el =>
+              setZipCodeItems(getZipCodeItems.map(el =>
                 el._id === currentItem._id ? {...result.data, _id: currentItem._id} : el,
               ));
               console.log(3333, getZipCodeItems);
             }
+            this.setState({currentItem: {}});
           }
 
           // generate error text for user

@@ -30,6 +30,7 @@ class ZipCodeStore {
 
   @action('set zip code items ')
   setZipCodeItems = (array) => {
+    console.log('ser', array);
     this.zipCodeItems = array;
   }
 
