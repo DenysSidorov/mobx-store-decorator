@@ -17,14 +17,8 @@ class ZipCodeItem extends React.Component {
   }
 
   render() {
-    const { el, currentItem, selectItem, removeItem} = this.props;
-    // const el = mobx.toJS(this.props.el) || {};
-    console.log('RENDER ITEM', el);
-    // console.log(' **** - ', el.places[0]);
+    const { el, currentItem, removeItem} = this.props;
     const isActive = { backgroundColor: el._id === currentItem._id ? '#3dce78' : ''};
-    console.log('el._id - ', el._id);
-    console.log('currentItem._id - ', currentItem._id);
-    console.log(el._id === currentItem._id );
     return (
       <div
         className="zipCodeCont_body_list_item"

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const SearchArea = ({handleChangeSearch, searchHandlerEnter, searchValue}) => {
-  console.log(searchValue, "ttttt ");
   return (
   <div className="zipCodeCont_body_list_search_container">
     <input
