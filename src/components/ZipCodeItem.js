@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import mobx from 'mobx';
-
-class ZipCodeItem extends React.PureComponent {
+// import mobx from 'mobx';
+import { observer } from 'mobx-react';
+class ZipCodeItem extends React.Component {
   componentDidMount() {}
+
+  userClicked = () => {
+    this.props.selectItem(this.props.el)
+  }
 
   shouldComponentUpdate(nextProps) {
     if (nextProps.el._id !== this.props.el._id || nextProps.currentItem._id !== this.props.currentItem._id) {
@@ -24,9 +28,7 @@ class ZipCodeItem extends React.PureComponent {
     return (
       <div
         className="zipCodeCont_body_list_item"
-        onClick={() => {
-          selectItem(el);
-        }}
+        onClick={this.userClicked}
         style={isActive}
       >
         <div className="itemLeft">
