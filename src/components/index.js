@@ -20,11 +20,12 @@ import { observer, inject } from 'mobx-react';
     searchValue: '',
     searchError: '',
     // isFetching: false,
-    zipCodeItems: [],
+    // zipCodeItems: [],
   };
 
   // input handler
   handleChangeSearch = event => {
+    const { setSearchValue } = this.props.zipCodeStore;
     const target = event.target.value;
     const regExp = new RegExp('^\\d+$');
 
@@ -35,8 +36,10 @@ import { observer, inject } from 'mobx-react';
 
     // type only numbers
     if (regExp.test(target) || target === '') {
-      this.setState({searchValue: target});
+      setSearchValue(target);
+      // this.setState({searchValue: target});
     } else {
+      setSearchValue('Please type only numbers');
       this.setState({searchError: 'Please type only numbers'});
       return;
     }
@@ -62,20 +65,23 @@ import { observer, inject } from 'mobx-react';
   };
 
   selectItem = replyItem => {
+    const { setSearchValue } = this.props.zipCodeStore;
     console.log('replyItem ', replyItem);
     // check item, selected or not
     const isAlreadySelected = this.state.currentItem['post code'] === replyItem['post code'];
 console.log(isAlreadySelected);
     if (isAlreadySelected) {
+      setSearchValue('');
       this.setState({
         currentItem: {},
-        searchValue: '',
+        // searchValue: '',
         searchError: '',
       });
     } else {
+      setSearchValue(replyItem['post code']);
       this.setState({
         currentItem: replyItem,
-        searchValue: replyItem['post code'],
+        // searchValue: replyItem['post code'],
       });
     }
   };
@@ -87,15 +93,16 @@ console.log(isAlreadySelected);
   };
 
   searchHandler = () => {
+    const { getSearchValue } = this.props.zipCodeStore;
     // fire search only if input has correct zip code
-    if (this.state.searchValue.length === 5) {
+    if (getSearchValue.length === 5) {
       this.getNewData();
     }
   };
 
   getNewData = async () => {
-    const {setZipCodeItems, getZipCodeItems, getFetchingState, addZipCodeItem} = this.props.zipCodeStore;
-    const {searchValue, currentItem} = this.state;
+    const {setZipCodeItems, getZipCodeItems, getFetchingState, addZipCodeItem, getSearchValue} = this.props.zipCodeStore;
+    const {currentItem} = this.state;
     // prevent fetching new data if user are fetching data now
     if (!getFetchingState) {
       // this.setState({isFetching: true});
@@ -103,7 +110,7 @@ console.log(isAlreadySelected);
       try {
         const result = await axios({
           method: 'get',
-          url: `https://api.zippopotam.us/us/${searchValue}`,
+          url: `https://api.zippopotam.us/us/${getSearchValue}`,
         });
 
         // if application has correct response
@@ -137,9 +144,10 @@ console.log(isAlreadySelected);
             searchError = 'Post code already exists';
           }
           this.props.zipCodeStore.setFetchingState(false);
+          this.props.zipCodeStore.setSearchValue('');
           this.setState({
             // isFetching: false,
-            searchValue: '',
+            // searchValue: '',
             searchError,
             // zipCodeItems: newData,
           });
@@ -161,7 +169,7 @@ console.log(isAlreadySelected);
 
   render() {
     const {currentItem} = this.state;
-    let {getZipCodeItems, getFetchingState} = this.props.zipCodeStore;
+    let {getZipCodeItems, getFetchingState, getSearchValue} = this.props.zipCodeStore;
     getZipCodeItems = mobx.toJS(getZipCodeItems);
     console.log('----- ', getZipCodeItems);
     return (
@@ -177,7 +185,7 @@ console.log(isAlreadySelected);
               </div>
               <div className="zipCodeCont_body_list_search_container_wrapper">
                 <SearchArea
-                  searchValue={this.state.searchValue}
+                  searchValue={getSearchValue}
                   handleChangeSearch={this.handleChangeSearch}
                   searchHandlerEnter={this.searchHandlerEnter}
                 />

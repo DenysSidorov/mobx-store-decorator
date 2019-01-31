@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const SearchArea = ({handleChangeSearch, searchHandlerEnter, searchValue}) => (
+const SearchArea = ({handleChangeSearch, searchHandlerEnter, searchValue}) => {
+  console.log(searchValue, "ttttt ");
+  return (
   <div className="zipCodeCont_body_list_search_container">
     <input
       type="text"
@@ -15,7 +17,7 @@ const SearchArea = ({handleChangeSearch, searchHandlerEnter, searchValue}) => (
     />
     <img src="/static-files/search-Black.png" className="zipCodeCont_body_list_search_img" />
   </div>
-);
+)};
 
 SearchArea.propTypes = {
   handleChangeSearch: PropTypes.func,

@@ -5,6 +5,7 @@ class ZipCodeStore {
 
   @observable isFetching = false;
   @observable zipCodeItems = [];
+  @observable searchValue = '';
 
 
   constructor(cities = [], initialState = {}) {
@@ -12,6 +13,16 @@ class ZipCodeStore {
     this.zipCodeItems = observable(cities);
 
     extendObservable(this, initialState);
+  }
+
+  @action('set search value')
+  setSearchValue = (string) => {
+    this.searchValue = string;
+  }
+
+  @computed
+  get getSearchValue () {
+    return this.searchValue;
   }
 
   @computed
