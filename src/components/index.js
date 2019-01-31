@@ -17,7 +17,7 @@ import { observer, inject } from 'mobx-react';
 @observer class ZiPCodeComponent extends React.Component {
   state = {
     currentItem: {},
-    searchValue: '',
+    // searchValue: '',
     searchError: '',
     // isFetching: false,
     // zipCodeItems: [],
@@ -25,7 +25,7 @@ import { observer, inject } from 'mobx-react';
 
   // input handler
   handleChangeSearch = event => {
-    const { setSearchValue } = this.props.zipCodeStore;
+    const { setSearchValue, setErrorValue } = this.props.zipCodeStore;
     const target = event.target.value;
     const regExp = new RegExp('^\\d+$');
 
@@ -40,15 +40,19 @@ import { observer, inject } from 'mobx-react';
       // this.setState({searchValue: target});
     } else {
       setSearchValue('Please type only numbers');
-      this.setState({searchError: 'Please type only numbers'});
+      setErrorValue('Please type only numbers');
+      // this.setState({searchError: 'Please type only numbers'});
       return;
     }
 
     // notification to user about not correct input
     if (target.length !== 5 && target.length !== 0) {
-      this.setState({searchError: 'Please type 5-digit code'});
+      setErrorValue('Please type 5-digit code');
+      // this.setState({searchError: 'Please type 5-digit code'});
     } else {
-      this.setState({searchError: ''});
+      setErrorValue('');
+
+      // this.setState({searchError: ''});
     }
   };
 
@@ -65,17 +69,18 @@ import { observer, inject } from 'mobx-react';
   };
 
   selectItem = replyItem => {
-    const { setSearchValue } = this.props.zipCodeStore;
+    const { setSearchValue, setErrorValue } = this.props.zipCodeStore;
     console.log('replyItem ', replyItem);
     // check item, selected or not
     const isAlreadySelected = this.state.currentItem['post code'] === replyItem['post code'];
 console.log(isAlreadySelected);
     if (isAlreadySelected) {
       setSearchValue('');
+      setErrorValue('');
       this.setState({
         currentItem: {},
         // searchValue: '',
-        searchError: '',
+        // searchError: '',
       });
     } else {
       setSearchValue(replyItem['post code']);
@@ -145,14 +150,17 @@ console.log(isAlreadySelected);
           }
           this.props.zipCodeStore.setFetchingState(false);
           this.props.zipCodeStore.setSearchValue('');
+          this.props.zipCodeStore.setErrorValue(searchError);
+
           this.setState({
             // isFetching: false,
             // searchValue: '',
-            searchError,
+            // searchError,
             // zipCodeItems: newData,
           });
         } else {
-          this.setState({searchError: 'Something wrong with connection!'});
+          // this.setState({searchError: 'Something wrong with connection!'});
+          this.props.zipCodeStore.setErrorValue('Something wrong with connection!');
           this.props.zipCodeStore.setFetchingState(false);
         }
       } catch (er) {
@@ -161,7 +169,9 @@ console.log(isAlreadySelected);
         if (er.response && er.response.data && er.response.data['post code'] === undefined) {
           searchError = "Post code wasn't found";
         }
-        this.setState({searchError});
+        this.props.zipCodeStore.setErrorValue(searchError);
+
+        // this.setState({searchError});
         this.props.zipCodeStore.setFetchingState(false);
       }
     }
@@ -169,7 +179,7 @@ console.log(isAlreadySelected);
 
   render() {
     const {currentItem} = this.state;
-    let {getZipCodeItems, getFetchingState, getSearchValue} = this.props.zipCodeStore;
+    let {getZipCodeItems, getFetchingState, getSearchValue, getSearchError} = this.props.zipCodeStore;
     getZipCodeItems = mobx.toJS(getZipCodeItems);
     console.log('----- ', getZipCodeItems);
     return (
@@ -181,7 +191,7 @@ console.log(isAlreadySelected);
           <div className="zipCodeCont_body">
             <div className="zipCodeCont_body_list">
               <div className="zipCodeCont_body_list_searchErrors">
-                {this.state.searchError.length ? <span>{this.state.searchError}</span> : null}
+                {getSearchError.length ? <span>{getSearchError}</span> : null}
               </div>
               <div className="zipCodeCont_body_list_search_container_wrapper">
                 <SearchArea

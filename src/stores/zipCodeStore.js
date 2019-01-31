@@ -6,6 +6,7 @@ class ZipCodeStore {
   @observable isFetching = false;
   @observable zipCodeItems = [];
   @observable searchValue = '';
+  @observable searchError = '';
 
 
   constructor(cities = [], initialState = {}) {
@@ -20,9 +21,19 @@ class ZipCodeStore {
     this.searchValue = string;
   }
 
+  @action('set error value')
+  setErrorValue = (string) => {
+    this.searchError = string;
+  }
+
   @computed
   get getSearchValue () {
     return this.searchValue;
+  }
+
+  @computed
+  get getSearchError () {
+    return this.searchError;
   }
 
   @computed
