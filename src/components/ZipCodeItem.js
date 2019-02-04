@@ -46,7 +46,7 @@ class ZipCodeItem extends React.Component {
             removeItem(e, el);
           }}
         >
-          Remove
+          Remove item
         </div>
       </div>
     );
