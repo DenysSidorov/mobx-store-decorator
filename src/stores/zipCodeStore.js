@@ -87,6 +87,67 @@ class ZipCodeStore {
     this.searchError = string;
   }
   /** Search error  - END*/
+
+  @action('get new zip codes async')
+  getNewData = async () => {
+    console.log('GET DATA');
+  }
+  // getNewData = async () => {
+  //   const {setZipCodeItems, getZipCodeItems, getFetchingState, addZipCodeItem, getSearchValue, setCurrentItem, getCurrentItem} = this.props.zipCodeStore;
+  //   // prevent fetching new data if user are fetching data now
+  //   if (!getFetchingState) {
+  //     this.props.zipCodeStore.setFetchingState(true);
+  //     try {
+  //       const result = await axios({
+  //         method: 'get',
+  //         url: `https://api.zippopotam.us/us/${getSearchValue}`,
+  //       });
+  //
+  //       // if application has correct response
+  //       if (result.status === 200) {
+  //         const isPostCodeExists = getZipCodeItems.some(
+  //           el => el['post code'] === result.data['post code'],
+  //         );
+  //
+  //         // create or change exists item
+  //         if (!isPostCodeExists) {
+  //           if (!getCurrentItem._id) {
+  //             // add new item
+  //             addZipCodeItem({...result.data, _id: generateUniqueId()});
+  //           } else {
+  //             // update exists item
+  //             setZipCodeItems(getZipCodeItems.map(el =>
+  //               el._id === getCurrentItem._id ? {...result.data, _id: getCurrentItem._id} : el,
+  //             ));
+  //           }
+  //           setCurrentItem({});
+  //         }
+  //
+  //         // generate error text for user
+  //         let searchError = '';
+  //         if (isPostCodeExists) {
+  //           searchError = 'Post code already exists';
+  //         }
+  //         this.props.zipCodeStore.setFetchingState(false);
+  //         this.props.zipCodeStore.setSearchValue('');
+  //         this.props.zipCodeStore.setErrorValue(searchError);
+  //
+  //       } else {
+  //         this.props.zipCodeStore.setErrorValue('Something wrong with connection!');
+  //         this.props.zipCodeStore.setFetchingState(false);
+  //       }
+  //     } catch (er) {
+  //       console.log(er.response || er);
+  //       let searchError = '';
+  //       if (er.response && er.response.data && er.response.data['post code'] === undefined) {
+  //         searchError = "Post code wasn't found";
+  //       }
+  //       this.props.zipCodeStore.setErrorValue(searchError);
+  //       this.props.zipCodeStore.setFetchingState(false);
+  //     }
+  //   }
+  // };
+
 }
 
 const zipCodeStore = new ZipCodeStore(cities);
