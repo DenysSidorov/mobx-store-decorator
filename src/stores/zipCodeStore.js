@@ -147,6 +147,7 @@ class ZipCodeStore {
   };
 }
 
+// Singleton of this store
 const zipCodeStore = new ZipCodeStore(cities);
 
 export default zipCodeStore;
