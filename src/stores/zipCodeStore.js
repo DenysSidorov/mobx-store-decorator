@@ -9,7 +9,7 @@ class ZipCodeStore {
   @observable zipCodeItems = [];
   @observable searchValue = '';
   @observable searchError = '';
-  @observable currentItem = {testValue: 'test'};
+  @observable currentItem = {};
 
 
   constructor(cities = [], initialState = {}) {
